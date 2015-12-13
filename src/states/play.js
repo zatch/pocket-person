@@ -7,7 +7,7 @@ define([
     'use strict';
     
     // Shortcuts
-    var game, keyboard, start, select, person, background, frame, hud, junk;
+    var game, keyboard, start, select, person, background, hud, junk;
 
     // Default starting properties/state of the game world. These properties
     // can be overridden by passing a data object to the Play state.
@@ -36,8 +36,6 @@ define([
         
         // Main
         create: function () {
-
-            var self = this;
             
             // World set-up
             this.game.world.setBounds(0, 0, 1400, 1400);
