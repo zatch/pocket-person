@@ -27,7 +27,7 @@ define([
             this.createMeter(10, game.height-50, 'satiation', 'satiation'),
             this.createMeter(10, game.height-40, 'hydration', 'hydration'),
             this.createMeter(10, game.height-30, 'affection', 'affection'),
-            this.createMeter(10, game.height-20, 'adrenaline', 'adrenaline')
+            this.createMeter(10, game.height-20, 'hygiene', 'hygiene')
         ];
 
     }

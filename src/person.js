@@ -24,7 +24,7 @@ define([
         this.satiation = 100;
         this.hydration = 100;
         this.affection = 100;
-        this.adrenaline = 100;
+        this.hygiene = 100;
         
         this.moveSpeed = 40;
         this.targetLocation = {
@@ -38,33 +38,29 @@ define([
         };
         game.time.events.loop(this.growth.rate, this.grow, this);
         
-        this.healthReduction = {
-            amount: 2
-        };
-        
         this.satiationReduction = {
-            rate: Phaser.Timer.SECOND,
-            amount: 10
+            rate: Phaser.Timer.SECOND*30,
+            amount: 5
         };
         game.time.events.loop(this.satiationReduction.rate, this.reduceSatiation, this);
         
         this.hydrationReduction = {
-            rate: Phaser.Timer.SECOND,
-            amount: 10
+            rate: Phaser.Timer.SECOND*40,
+            amount: 8
         };
         game.time.events.loop(this.hydrationReduction.rate, this.reduceHydration, this);
         
         this.affectionReduction = {
-            rate: Phaser.Timer.SECOND,
-            amount: 2
+            rate: Phaser.Timer.SECOND*100,
+            amount: 10
         };
         game.time.events.loop(this.affectionReduction.rate, this.reduceAffection, this);
         
-        this.adrenalineReduction = {
-            rate: Phaser.Timer.SECOND,
-            amount: 2
+        this.hygieneReduction = {
+            rate: Phaser.Timer.SECOND*150,
+            amount: 20
         };
-        game.time.events.loop(this.adrenalineReduction.rate, this.reduceAdrenaline, this);
+        game.time.events.loop(this.hygieneReduction.rate, this.reduceHygiene, this);
         
         
         // Signals
@@ -84,7 +80,6 @@ define([
         
         this.decideNextTarget();
         this.moveToTarget(this.targetLocation);
-        
         
         // Call up!
         Phaser.Sprite.prototype.update.call(this);
@@ -173,11 +168,84 @@ define([
         }
     };
     
-    Person.prototype.reduceAdrenaline = function () {
-        this.adrenaline -= this.adrenalineReduction.amount;
-        if (this.adrenaline <= 0) {
-            this.adrenaline = 0;
+    Person.prototype.reduceHygiene = function () {
+        this.hygiene -= this.hygieneReduction.amount;
+        if (this.hygiene <= 0) {
+            this.hygiene = 0;
         }
+    };
+    
+    Person.prototype.capStats = function () {
+        if (this.health > 100) this.health = 100;
+        if (this.satiation > 100) this.satiation = 100;
+        if (this.hydration > 100) this.hydration = 100;
+        if (this.affection > 100) this.affection = 100;
+        if (this.hygiene > 100) this.hygiene = 100;
+        
+        if (this.health <= 0) {
+            this.health = 0;
+        }
+        if (this.satiation <= 0) {
+            this.satiation = 0;
+        }
+        if (this.hydration <= 0) {
+            this.hydration = 0;
+        }
+        if (this.affection <= 0) {
+            this.affection = 0;
+        }
+        if (this.hygiene <= 0) {
+            this.hygiene = 0;
+        }
+    };
+    
+    Person.prototype.give = function (gift) {
+        switch (gift) {
+            case 'protein powder':
+                this.satiation += 10;
+                this.hydration -= 8;
+                break;
+            case 'protein paste':
+                this.satiation += 10;
+                this.hydration += 3;
+                break;
+            case 'meat':
+                this.satiation += 20;
+                break;
+            case 'water':
+                this.hydration += 20;
+                this.hygiene += 5;
+                break;
+            case 'coffee':
+                this.hydration += 3;
+                this.satiation += 3;
+                this.affection -= 6;
+                this.hygiene += 16;
+                break;
+            case 'green shake':
+                this.hydration += 20;
+                this.satiation += 20;
+                break;
+            case 'kisses':
+                this.affection += 15;
+                break;
+            case 'adult kisses':
+                this.affection += 30;
+                this.hygiene -= 30;
+                break;
+            case 'sponge bath':
+                this.hygiene += 50;
+                break;
+            default:
+                break;
+        }
+        
+        this.capStats();
+        if (this.health > 100) this.health = 100;
+        if (this.satiation > 100) this.satiation = 100;
+        if (this.hydration > 100) this.hydration = 100;
+        if (this.affection > 100) this.affection = 100;
+        if (this.hygiene > 100) this.hygiene = 100;
     };
 
     return Person;

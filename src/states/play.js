@@ -1,13 +1,13 @@
 define([
     'phaser',
     'person',
-    'hud'
-
-], function (Phaser, Person, HUD) { 
+    'hud',
+    'menu'
+], function (Phaser, Person, HUD, Menu) { 
     'use strict';
     
     // Shortcuts
-    var game, keyboard, start, select, person, background, hud, junk;
+    var game, keyboard, start, select, person, background, hud, menu, junk;
 
     // Default starting properties/state of the game world. These properties
     // can be overridden by passing a data object to the Play state.
@@ -18,7 +18,7 @@ define([
                 hunger: null,
                 thirst: null,
                 affection: null,
-                adrenaline: null
+                hygiene: null
             }
         };
 
@@ -56,17 +56,21 @@ define([
             person.satiation    = initialState.person.satiation ? initialState.person.satiation : person.satiation;
             person.hydration    = initialState.person.hydration ? initialState.person.hydration : person.hydration;
             person.affection    = initialState.person.affection ? initialState.person.affection : person.affection;
-            person.adrenaline   = initialState.person.adrenaline ? initialState.person.adrenaline : person.adrenaline;
+            person.hygiene      = initialState.person.hygiene ? initialState.person.hygiene : person.hygiene;
 
             
             // Add HUD.
             hud = new HUD(game);
-            this.add.existing(hud);
+            game.add.existing(hud);
+            
+            // Add Menu.
+            menu = new Menu(game);
+            game.add.existing(menu);
             
             // On-screen buttons.
             start = game.add.button(460, game.height - 30, 'start-button', this.onStartPressed, this, 1, 0, 2);
             start.fixedToCamera = true;
-            select = game.add.button(530, game.height - 30, 'select-button', this.onSelectPressed, this, 1, 0, 2);
+            select = game.add.button(524, game.height - 30, 'select-button', this.onSelectPressed, this, 1, 0, 2);
             select.fixedToCamera = true;
         
             // Keyboard input set-up
@@ -118,11 +122,18 @@ define([
         },
         
         onStartPressed: function () {
-            console.log('start');
+            if (!menu.visible) {
+                menu.show();
+            }
+            else {
+                menu.confirm();
+            }
         },
         
         onSelectPressed: function () {
-            console.log('select');
+            if (menu.visible) {
+                menu.select();
+            }
         },
         
         onToggleFullscreen: function () {

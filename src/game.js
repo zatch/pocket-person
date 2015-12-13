@@ -32,6 +32,8 @@ define([
             this.game.load.atlas('person', 'assets/person.png', 'assets/person.json');
             this.game.load.atlas('start-button', 'assets/start-button.png', 'assets/start-button.json');
             this.game.load.atlas('select-button', 'assets/select-button.png', 'assets/select-button.json');
+            this.game.load.image('menu', 'assets/menu.png');
+            this.game.load.image('menu-selection', 'assets/menu-selection.png');
             this.game.load.image('frame', 'assets/frame.png');
             this.game.load.image('meter', 'assets/meter.png');
             this.game.load.image('meter-fill', 'assets/meter-fill.png');
