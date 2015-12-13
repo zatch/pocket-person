@@ -76,7 +76,7 @@ define([
             
             // Camera
             game.camera.follow(person, Phaser.Camera.FOLLOW_PLATFORMER);
-
+            game.scale.startFullScreen();
         },
 
         render: function () {

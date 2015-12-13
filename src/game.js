@@ -22,6 +22,10 @@ define([
 
         init: function () {
             this.game.stage.smoothed = false;
+            
+            // When in full-screen mode, take up as much of the screen as 
+            // possible while maintaining game proportions.
+            this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
         },
 
         preload: function() {
