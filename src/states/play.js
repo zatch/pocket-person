@@ -44,8 +44,7 @@ define([
             
             // Player set-up
             person = new Person(game, game.world.width/2, game.world.height/2);
-            person.events.onHeal.add(this.onPersonHeal);
-            person.events.onDamage.add(this.onPersonDamage);
+            person.events.onLeaveNest.add(this.onPersonLeaveNest);
             person.events.onDeath.add(this.onPersonDeath);
 
             game.add.existing(person); // Add person to game.
@@ -60,6 +59,8 @@ define([
 
             
             // Add HUD.
+            game.personsGrown = 0;
+            game.personsDead = 0;
             hud = new HUD(game);
             game.add.existing(hud);
             
@@ -87,33 +88,16 @@ define([
             
             // Physics engine set-up
             game.physics.startSystem(Phaser.Physics.ARCADE);
-            
-            // Camera
-            game.camera.follow(person, Phaser.Camera.FOLLOW_PLATFORMER);
-            game.scale.startFullScreen();
-        },
-
-        render: function () {
-            
-        },
-
-        update: function () {
-            
-        },
-
-        shutdown: function () {
-            // This prevents occasional momentary "flashes" during state transitions.
-            //game.camera.unfollow();
         },
         
         generateJunk: function (keysArray) {
             junk = game.add.group();
             
-            var numJunk = this.game.rnd.integerInRange(10, 20);
+            var numJunk = this.game.rnd.integerInRange(25, 35);
             var x, y, junkKey;
             for (var i = 0; i < numJunk; i++) {
-                x = this.game.rnd.integerInRange(game.width, game.world.width - game.width);
-                y = this.game.rnd.integerInRange(game.height, game.world.height - game.height);
+                x = this.game.rnd.integerInRange(0, game.world.width);
+                y = this.game.rnd.integerInRange(0, game.world.height);
                 junkKey = this.game.rnd.integerInRange(0, keysArray.length-1);
                 junk.create(x, y, keysArray[junkKey]);
             }
@@ -142,16 +126,15 @@ define([
             }
         },
 
-        onPersonDamage: function (person, amount) {
-            console.log('health: ', person.health);
+        onPersonLeaveNest: function () {
+            game.personsGrown++;
         },
 
-        onPersonHeal: function (person, amount) {
-            console.log('health: ', person.health);
-        },
-
-        onPersonDeath: function (person) {
-            console.log('death');
+        onPersonDeath: function () {
+            game.personsDead++;
+            var newlyDead = junk.create(person.x-person.width/2, person.y, 'dead-person');
+            newlyDead.scale.x = person.scale.x;
+            newlyDead.scale.y = person.scale.y;
         }
     };
 });

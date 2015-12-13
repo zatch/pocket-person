@@ -29,13 +29,19 @@ define([
             this.createMeter(10, game.height-30, 'affection', 'affection'),
             this.createMeter(10, game.height-20, 'hygiene', 'hygiene')
         ];
-
+        
+        var personsCounterStyle  = { font: "16px Arial", fill: "#fff", boundsAlignH: "left", boundsAlignV: "middle" };
+        this.personsGrownLabel = 'People grown: ';
+        this.personsGrownText = new Phaser.Text(game, 10, 10, this.personsGrownLabel, personsCounterStyle);
+        this.add(this.personsGrownText);
     }
 
     HUD.prototype = Object.create(Phaser.Group.prototype);
     HUD.prototype.constructor = HUD;
 
     HUD.prototype.update = function () {
+        this.personsGrownText.setText(this.personsGrownLabel + game.personsGrown);
+        
         for (lcvMeters = 0; lcvMeters < this.meters.length; lcvMeters++) {
             this.updateMeter(this.meters[lcvMeters]);
         }

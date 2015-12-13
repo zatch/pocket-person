@@ -12,13 +12,15 @@ define([
         self = this;
 
         // Initialize sprite
-        Phaser.Sprite.call(this, game, x, y, 'person');
+        Phaser.Sprite.call(this, game, x, y-game.height, 'person');
         this.anchor.set(0.5);
         this.animations.add('walk', [0,1,2,3,4], 10);
 
         // Enable physics.
         game.physics.enable(this);
-     
+        
+        this.queueNewPlayer = true;
+        
         // Initial stats.
         this.health = 100;
         this.satiation = 100;
@@ -26,46 +28,45 @@ define([
         this.affection = 100;
         this.hygiene = 100;
         
-        this.moveSpeed = 40;
+        this.moveSpeed = 80;
         this.targetLocation = {
             x: this.x,
             y: this.y
         };
         
         this.growth = {
-            rate: Phaser.Timer.MINUTE,
-            amount: 1.2
+            rate: Phaser.Timer.SECOND*15,
+            amount: 1.5
         };
         game.time.events.loop(this.growth.rate, this.grow, this);
         
         this.satiationReduction = {
-            rate: Phaser.Timer.SECOND*30,
+            rate: Phaser.Timer.SECOND*15,
             amount: 5
         };
         game.time.events.loop(this.satiationReduction.rate, this.reduceSatiation, this);
         
         this.hydrationReduction = {
-            rate: Phaser.Timer.SECOND*40,
+            rate: Phaser.Timer.SECOND*10,
             amount: 8
         };
         game.time.events.loop(this.hydrationReduction.rate, this.reduceHydration, this);
         
         this.affectionReduction = {
-            rate: Phaser.Timer.SECOND*100,
+            rate: Phaser.Timer.SECOND*20,
             amount: 10
         };
         game.time.events.loop(this.affectionReduction.rate, this.reduceAffection, this);
         
         this.hygieneReduction = {
-            rate: Phaser.Timer.SECOND*150,
+            rate: Phaser.Timer.SECOND*30,
             amount: 20
         };
         game.time.events.loop(this.hygieneReduction.rate, this.reduceHygiene, this);
         
         
         // Signals
-        this.events.onHeal = new Phaser.Signal();
-        this.events.onDamage = new Phaser.Signal();
+        this.events.onLeaveNest = new Phaser.Signal();
         this.events.onDeath = new Phaser.Signal();
         
     }
@@ -77,6 +78,12 @@ define([
         
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
+        
+        if (this.queueNewPlayer) {
+            if (!this.inCamera) {
+                this.enterNewPerson();
+            }
+        }
         
         this.decideNextTarget();
         this.moveToTarget(this.targetLocation);
@@ -96,9 +103,12 @@ define([
     },
     
     Person.prototype.decideNextTarget = function () {
+        
         // Don't get distracted until we reach our target location.
         if (Math.abs(this.x-this.targetLocation.x) > this.moveSpeed ||
             Math.abs(this.y-this.targetLocation.y) > this.moveSpeed) return;
+        
+        this.startCameraFollow();
         
         // Decide to rest 99% of the time.
         var restChance = this.game.rnd.integerInRange(0, 100);
@@ -110,11 +120,32 @@ define([
         
     };
     
+    Person.prototype.resetAll = function (amount) {
+        // Reset scale.
+        this.scale.x = 1;
+        this.scale.y = 1;
+        
+        // Position new person and move them into the camera.
+        this.x = Math.round(game.camera.x + (game.camera.width / 2));
+        this.y = game.camera.y - this.height;
+        this.targetLocation.x = this.x;
+        this.targetLocation.y = Math.round(this.y + (this.height * 2) + (game.camera.height / 2));
+        
+        // Reset stats.
+        this.health = 100;
+        this.satiation = 100;
+        this.hydration = 100;
+        this.affection = 100;
+        this.hygiene = 100;
+    };
+    
     Person.prototype.damage = function (amount) {
         this.health -= amount;
         if (this.health <= 0) {
-            // TODO: Die.
             this.health = 0;
+            
+            // Die.
+            this.die();
         }
     };
     
@@ -125,20 +156,58 @@ define([
         }
     };
     
+    Person.prototype.die = function () {
+        this.stopCameraFollow();
+        this.queueNewPlayer = true;
+        
+        // Notify game of the death!
+        this.events.onDeath.dispatch();
+        
+        this.resetAll();
+    };
+    
     Person.prototype.grow = function () {
         // Don't grow if life sucks.
         if (this.satiation < 80 ||
             this.hydration < 80 ||
-            this.affection < 80) return;
+            this.affection < 80 ||
+            this.hygiene < 80) return;
+        
+        // TODO: Win.
+        if (this.scale.x >= 4) {
+            this.leaveTheNest();
+            return;
+        }
         
         // Grow if we made it this far.
         this.scale.x *= this.growth.amount;
         this.scale.y *= this.growth.amount;
-        
-        if (this.scale >= 5) {
-            // TODO: Win.
-            console.log ('you win!');
+    };
+    
+    Person.prototype.startCameraFollow = function () {
+        game.camera.follow(this, Phaser.Camera.FOLLOW_PLATFORMER);
+    };
+    
+    Person.prototype.stopCameraFollow = function () {
+        game.camera.unfollow();
+    };
+    
+    Person.prototype.leaveTheNest = function () {
+        if (!this.queueNewPlayer) {
+            this.stopCameraFollow();
+            this.queueNewPlayer = true;
+            // We decided to pick a new random target.
+            this.targetLocation.x = game.camera.x - this.width;
+            this.targetLocation.y = this.y;
+            
+            // Notify game of another successful human adult leaving the nest!
+            this.events.onLeaveNest.dispatch();
         }
+    };
+    
+    Person.prototype.enterNewPerson = function () {
+        this.queueNewPlayer = false;
+        this.resetAll();
     };
     
     Person.prototype.reduceSatiation = function () {
@@ -165,6 +234,9 @@ define([
         this.affection -= this.affectionReduction.amount;
         if (this.affection <= 0) {
             this.affection = 0;
+            
+            // Damage the person.
+            this.damage(this.affectionReduction.amount);
         }
     };
     
@@ -172,6 +244,9 @@ define([
         this.hygiene -= this.hygieneReduction.amount;
         if (this.hygiene <= 0) {
             this.hygiene = 0;
+            
+            // Damage the person.
+            this.damage(this.hygieneReduction.amount);
         }
     };
     
@@ -234,6 +309,7 @@ define([
                 this.hygiene -= 30;
                 break;
             case 'sponge bath':
+                this.affection += 10;
                 this.hygiene += 50;
                 break;
             default:

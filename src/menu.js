@@ -123,9 +123,16 @@ define([
     };
     
     Menu.prototype.populate = function () {
-        this.options = this.optionTree;
-        if(typeof this.location !== "undefined") {
-            this.options = this.options[this.location].options;
+        // Use the regular menu options if there's a person.
+        if (game.person) {
+            this.options = this.optionTree;
+            if(typeof this.location !== "undefined") {
+                this.options = this.options[this.location].options;
+            }
+        }
+        // Give the player an option to create a new person.
+        else {
+            this.options = [{label: 'new person'}];
         }
         
         for (var lcv = 0; lcv < this.options.length; lcv++) {
