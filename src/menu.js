@@ -69,7 +69,7 @@ define([
             {label: 'cancel'}
         ];
         this.options = this.optionTree;
-        this.selected = 3;
+        this.selected = 0;
         this.location = undefined;
         
         this.hide();
@@ -132,7 +132,7 @@ define([
             this.gumpOptions[lcv].setText(this.options[lcv].label);
         }
         
-        this.selected = 3;
+        this.selected = 0;
     };
     
 
