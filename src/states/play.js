@@ -1,12 +1,13 @@
 define([
     'phaser',
-    'person'
+    'person',
+    'hud'
 
-], function (Phaser, Person) { 
+], function (Phaser, Person, HUD) { 
     'use strict';
     
     // Shortcuts
-    var game, keyboard, person, background, junk;
+    var game, keyboard, person, background, frame, hud, junk;
 
     // Default starting properties/state of the game world. These properties
     // can be overridden by passing a data object to the Play state.
@@ -54,11 +55,16 @@ define([
 
             // Apply prior person state (if it exists).
             person.health       = initialState.person.health ? initialState.person.health : person.health;
-            person.hunger       = initialState.person.hunger ? initialState.person.hunger : person.hunger;
-            person.thirst       = initialState.person.thirst ? initialState.person.thirst : person.thirst;
+            person.satiation    = initialState.person.satiation ? initialState.person.satiation : person.satiation;
+            person.hydration    = initialState.person.hydration ? initialState.person.hydration : person.hydration;
             person.affection    = initialState.person.affection ? initialState.person.affection : person.affection;
             person.adrenaline   = initialState.person.adrenaline ? initialState.person.adrenaline : person.adrenaline;
 
+            
+            // Add HUD.
+            hud = new HUD(game);
+            this.add.existing(hud);
+            
             // Keyboard input set-up
             keyboard = game.input.keyboard.createCursorKeys();
             keyboard.buttons = {

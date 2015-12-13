@@ -31,6 +31,8 @@ define([
         preload: function() {
             this.game.load.atlas('person', 'assets/person.png', 'assets/person.json');
             this.game.load.image('frame', 'assets/frame.png');
+            this.game.load.image('meter', 'assets/meter.png');
+            this.game.load.image('meter-fill', 'assets/meter-fill.png');
             this.game.load.image('background', 'assets/background.png');
             this.game.load.image('banana', 'assets/banana.png');
             
