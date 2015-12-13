@@ -38,7 +38,11 @@ define([
             this.game.load.image('meter', 'assets/meter.png');
             this.game.load.image('meter-fill', 'assets/meter-fill.png');
             this.game.load.image('background', 'assets/background.png');
+            
+            // Junk
             this.game.load.image('banana', 'assets/banana.png');
+            this.game.load.image('apple', 'assets/apple.png');
+            this.game.load.image('orange', 'assets/orange.png');
             
             // Can be used for anything that doesn't need a sprite sheet.
             // Workaround for issue: https://github.com/photonstorm/phaser/issues/2173

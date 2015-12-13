@@ -40,7 +40,7 @@ define([
             // World set-up
             this.game.world.setBounds(0, 0, 1400, 1400);
             background = this.add.tileSprite(0,0,game.world.width,game.world.height,'background');
-            this.generateJunk();
+            this.generateJunk(['banana', 'apple', 'orange']);
             
             // Player set-up
             person = new Person(game, game.world.width/2, game.world.height/2);
@@ -106,18 +106,16 @@ define([
             //game.camera.unfollow();
         },
         
-        generateJunk: function () {
+        generateJunk: function (keysArray) {
             junk = game.add.group();
             
-            var numBananas = this.game.rnd.integerInRange(10, 20);
-            var banana;
-            for (var i = 0; i < numBananas; i++) {
-                // Add sprite within an area excluding the beginning and ending of
-                // the game world, so items won't suddenly appear or disappear
-                // when wrapping.
-                var x = this.game.rnd.integerInRange(game.width, game.world.width - game.width);
-                var y = this.game.rnd.integerInRange(game.height, game.world.height - game.height);
-                banana = junk.create(x, y, 'banana');
+            var numJunk = this.game.rnd.integerInRange(10, 20);
+            var x, y, junkKey;
+            for (var i = 0; i < numJunk; i++) {
+                x = this.game.rnd.integerInRange(game.width, game.world.width - game.width);
+                y = this.game.rnd.integerInRange(game.height, game.world.height - game.height);
+                junkKey = this.game.rnd.integerInRange(0, keysArray.length-1);
+                junk.create(x, y, keysArray[junkKey]);
             }
         },
         
