@@ -1,0 +1,16 @@
+{
+  "name": "Pocket-Person",
+  "version": "0.1.0",
+  "description": "My LD34 entry",
+  "authors": [
+    "https://github.com/zatch"
+  ],
+  "license": "",
+  "dependencies": {
+    "requirejs": "latest",
+    "phaser": "latest"
+  },
+  "ignore": [
+    "src/lib"
+  ]
+}
