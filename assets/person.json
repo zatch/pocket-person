@@ -1,6 +1,6 @@
 { "frames": {
    "person 0.ase": {
-    "frame": { "x": 0, "y": 0, "w": 35, "h": 64 },
+    "frame": { "x": 1, "y": 1, "w": 37, "h": 66 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 64 },
@@ -8,7 +8,7 @@
     "duration": 100
    },
    "person 1.ase": {
-    "frame": { "x": 35, "y": 0, "w": 35, "h": 64 },
+    "frame": { "x": 39, "y": 1, "w": 37, "h": 66 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 64 },
@@ -16,7 +16,7 @@
     "duration": 100
    },
    "person 2.ase": {
-    "frame": { "x": 70, "y": 0, "w": 35, "h": 64 },
+    "frame": { "x": 77, "y": 1, "w": 37, "h": 66 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 64 },
@@ -24,7 +24,7 @@
     "duration": 100
    },
    "person 3.ase": {
-    "frame": { "x": 0, "y": 64, "w": 35, "h": 64 },
+    "frame": { "x": 1, "y": 68, "w": 37, "h": 66 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 64 },
@@ -32,7 +32,7 @@
     "duration": 100
    },
    "person 4.ase": {
-    "frame": { "x": 35, "y": 64, "w": 35, "h": 64 },
+    "frame": { "x": 39, "y": 68, "w": 37, "h": 66 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 64 },
@@ -45,7 +45,7 @@
   "version": "1.1.1",
   "image": "J:\\LightTPD\\htdocs\\pocket-person\\assets\\person.png",
   "format": "RGBA8888",
-  "size": { "w": 128, "h": 128 },
+  "size": { "w": 128, "h": 256 },
   "scale": "1"
  }
 }

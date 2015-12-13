@@ -7,7 +7,7 @@ define([
     'use strict';
     
     // Shortcuts
-    var game, keyboard, person, background, frame, hud, junk;
+    var game, keyboard, start, select, person, background, frame, hud, junk;
 
     // Default starting properties/state of the game world. These properties
     // can be overridden by passing a data object to the Play state.
@@ -65,14 +65,20 @@ define([
             hud = new HUD(game);
             this.add.existing(hud);
             
+            // On-screen buttons.
+            start = game.add.button(460, game.height - 30, 'start-button', this.onStartPressed, this, 1, 0, 2);
+            start.fixedToCamera = true;
+            select = game.add.button(530, game.height - 30, 'select-button', this.onSelectPressed, this, 1, 0, 2);
+            select.fixedToCamera = true;
+        
             // Keyboard input set-up
             keyboard = game.input.keyboard.createCursorKeys();
             keyboard.buttons = {
-                option: game.input.keyboard.addKey(Phaser.Keyboard.COMMA),
+                start: game.input.keyboard.addKey(Phaser.Keyboard.COMMA),
                 select: game.input.keyboard.addKey(Phaser.Keyboard.PERIOD)
             };
             
-            keyboard.buttons.option.onDown.add(this.onOptionPressed, this);
+            keyboard.buttons.start.onDown.add(this.onStartPressed, this);
             keyboard.buttons.select.onDown.add(this.onSelectPressed, this);
             
             game.input.keyboard.addKey(Phaser.Keyboard.F).onDown.add(this.onToggleFullscreen, this);
@@ -113,8 +119,8 @@ define([
             }
         },
         
-        onOptionPressed: function () {
-            console.log('option');
+        onStartPressed: function () {
+            console.log('start');
         },
         
         onSelectPressed: function () {

@@ -1,0 +1,35 @@
+{ "frames": {
+   "select-button 0.ase": {
+    "frame": { "x": 1, "y": 1, "w": 62, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 60, "h": 20 },
+    "sourceSize": { "w": 60, "h": 20 },
+    "duration": 100
+   },
+   "select-button 1.ase": {
+    "frame": { "x": 64, "y": 1, "w": 62, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 60, "h": 20 },
+    "sourceSize": { "w": 60, "h": 20 },
+    "duration": 100
+   },
+   "select-button 2.ase": {
+    "frame": { "x": 1, "y": 24, "w": 62, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 60, "h": 20 },
+    "sourceSize": { "w": 60, "h": 20 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.1.1",
+  "image": "J:\\LightTPD\\htdocs\\pocket-person\\assets\\select-button.png",
+  "format": "RGBA8888",
+  "size": { "w": 128, "h": 64 },
+  "scale": "1"
+ }
+}
